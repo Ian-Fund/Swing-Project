@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import java.io.*;
 import java.util.*;
 import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author mathbot
@@ -36,13 +37,13 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         inputLabel = new javax.swing.JLabel();
         inputField = new javax.swing.JTextField();
         inputBrowse = new javax.swing.JButton();
         loadButton = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         outputLabel = new javax.swing.JLabel();
         outputField = new javax.swing.JTextField();
         outputBrowse = new javax.swing.JButton();
@@ -52,38 +53,15 @@ public class MainFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Title", "Author", "ISBN"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(jTable1);
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 607, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGap(0, 631, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -110,6 +88,24 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Title", "Author", "ISBN"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -123,6 +119,10 @@ public class MainFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(loadButton)
                 .addGap(0, 33, Short.MAX_VALUE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -133,7 +133,9 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(inputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(inputBrowse)
                     .addComponent(loadButton))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         outputLabel.setText("Output File");
@@ -152,6 +154,11 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         saveButton.setText("Save");
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveButtonActionPerformed(evt);
+            }
+        });
 
         menuBarButton.setText("Menu");
         jMenuBar1.add(menuBarButton);
@@ -185,8 +192,8 @@ public class MainFrame extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(71, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(286, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(outputLabel)
@@ -197,7 +204,7 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 280, Short.MAX_VALUE)))
+                    .addGap(0, 69, Short.MAX_VALUE)))
         );
 
         pack();
@@ -252,17 +259,17 @@ public class MainFrame extends javax.swing.JFrame {
                 book.setAuthor(author);
                 book.setIsbn(isbn);
                 bookArray.add(book);
-                System.out.println(bookArray.get(i).getTitle());
                }
                // We have the list here
                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
                Object rowData[] = new Object[3];
-                for (int j = 0; j < 1; j++) {
-                    rowData[0] = bookArray.get(j).getTitle();
-                    rowData[1]=bookArray.get(j).getAuthor();
-                    rowData[2 ] = bookArray.get(j).getIsbn();
+             
+                    rowData[0] = bookArray.get(i).getTitle();
+                    rowData[1]=bookArray.get(i).getAuthor();
+                    rowData[2 ] = bookArray.get(i).getIsbn();
                     model.addRow(rowData);
-                }
+                    i++;
+                
               }
      
            
@@ -285,6 +292,31 @@ public class MainFrame extends javax.swing.JFrame {
             outputField.setText(selectedFile.getAbsolutePath());
                      }
     }//GEN-LAST:event_outputBrowseActionPerformed
+
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+       try{
+        File file = new File(outputField.getText());
+       if(!file.exists()){
+           file.createNewFile();
+       }
+       FileWriter fw = new FileWriter(file.getAbsoluteFile());
+       BufferedWriter bw =  new BufferedWriter(fw);
+       
+           for (int i = 0; i < jTable1.getRowCount(); i++) {
+               for (int j = 0; j < jTable1.getColumnCount(); j++) {
+                   bw.write( jTable1.getModel().getValueAt(i, j)+",");
+               }
+               bw.write("\n");
+           }
+           bw.close();
+           fw.close();
+       }
+       catch(Exception ex){
+           // what does this do?
+           ex.printStackTrace();
+           
+       }
+    }//GEN-LAST:event_saveButtonActionPerformed
 
     /**
      * @param args the command line arguments
