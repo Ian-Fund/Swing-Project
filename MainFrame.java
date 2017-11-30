@@ -252,7 +252,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         Object rowData[] = new Object[3];
         int i = 0;
         for (Book b : bookArray) {
-            System.out.println(b);
+            
             rowData[0] = bookArray.get(i).getTitle();
             rowData[1] = bookArray.get(i).getAuthor();
             rowData[2] = bookArray.get(i).getIsbn();
@@ -262,8 +262,9 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         }
     }
     public void addBooktoTable(Book book){
-        Book arr[] = null;
+        Book arr[] = new Book[1];
         arr[0] = book;
+        System.out.println(arr[0].getAuthor());
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.addRow(arr);
     }
@@ -322,7 +323,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
        
-        AddBook addBook = new AddBook(this, true);
+        AddBook addBook = new AddBook(this, true,frame);
         addBook.setDefaultCloseOperation(addBook.DISPOSE_ON_CLOSE);
        addBook.setVisible(true);
        addBook.addWindowListener(new WindowAdapter() {
@@ -373,11 +374,11 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 MainFrame frame = new MainFrame();
-                frame.setVisible(true);
+                new MainFrame().setVisible(true);
             }
         });
     }
-
+MainFrame frame;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.IanFund.java.csvFileLoaderBean csvFileLoaderBean1;
     private javax.swing.JPanel inputPanel;

@@ -18,9 +18,9 @@ public class AddBook extends javax.swing.JFrame {
     /**
      * Creates new form AddBook
      */
-    public AddBook(java.awt.Frame parent, boolean modal) {
-       
-        initComponents();
+    public AddBook(java.awt.Frame parent, boolean modal, MainFrame mainFrame) {
+       initComponents();
+        
     }
    
     /**
@@ -158,7 +158,7 @@ public static boolean isInteger(String str) {
          
          //Get Object to addBook in Mainframe
          
-        // frame.addBooktoTable(addBook);
+        frame.addBooktoTable(addBook);
         /*//DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         Object rowData[] = new Object[3];
        
@@ -188,4 +188,6 @@ public static boolean isInteger(String str) {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     // End of variables declaration//GEN-END:variables
+
+MainFrame frame = new MainFrame();
 }
