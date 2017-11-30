@@ -4,27 +4,45 @@
  * and open the template in the editor.
  */
 package com.IanFund.java;
+
+import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.JFileChooser;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author mathbot
  */
-public class MainFrame extends javax.swing.JFrame {
+public class MainFrame extends javax.swing.JFrame implements ActionListener {
 
     /**
      * Creates new form MainFrame
      */
     public MainFrame() {
+
         initComponents();
+        //booklist = new ArrayList();
+        csvFileLoaderBean1.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(csvFileLoaderBean.FILE_LOADER_EVENT)) {
+                    if (evt.getNewValue().equals(csvFileLoaderBean.FILE_STATE_CHANGED)) {
+                        //booklist  = csvFileLoaderBean1.getBookArray();
+                        loadTable(csvFileLoaderBean1.getBookArray());
+                    }
+                }
+            }
+        });
+
     }
 
     /**
@@ -38,18 +56,20 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        inputLabel = new javax.swing.JLabel();
-        inputField = new javax.swing.JTextField();
-        inputBrowse = new javax.swing.JButton();
-        loadButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         outputLabel = new javax.swing.JLabel();
         outputField = new javax.swing.JTextField();
         outputBrowse = new javax.swing.JButton();
         saveButton = new javax.swing.JButton();
+        inputPanel = new javax.swing.JPanel();
+        csvFileLoaderBean1 = new com.IanFund.java.csvFileLoaderBean();
+        xmlFileLoaderBean1 = new com.IanFund.java.xmlFileLoaderBean();
+        sqlFileLoaderBean1 = new com.IanFund.java.sqlFileLoaderBean();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuBarButton = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -57,7 +77,7 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 631, Short.MAX_VALUE)
+            .addGap(0, 637, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -65,28 +85,6 @@ public class MainFrame extends javax.swing.JFrame {
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        inputLabel.setText("Input File");
-
-        inputField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputFieldActionPerformed(evt);
-            }
-        });
-
-        inputBrowse.setText("Browse");
-        inputBrowse.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputBrowseActionPerformed(evt);
-            }
-        });
-
-        loadButton.setText("Load");
-        loadButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                loadButtonActionPerformed(evt);
-            }
-        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -111,30 +109,15 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(inputLabel)
-                .addGap(3, 3, 3)
-                .addComponent(inputField, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(inputBrowse)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(loadButton)
-                .addGap(0, 33, Short.MAX_VALUE))
-            .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 609, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(inputLabel)
-                    .addComponent(inputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(inputBrowse)
-                    .addComponent(loadButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
+                .addGap(66, 66, 66)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -160,7 +143,37 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        inputPanel.setLayout(new java.awt.CardLayout());
+        inputPanel.add(csvFileLoaderBean1, "csvInput");
+        csvFileLoaderBean1.getAccessibleContext().setAccessibleName("");
+        csvFileLoaderBean1.getAccessibleContext().setAccessibleDescription("");
+
+        inputPanel.add(xmlFileLoaderBean1, "xmlCard");
+        inputPanel.add(sqlFileLoaderBean1, "SQLcard");
+
         menuBarButton.setText("Menu");
+        menuBarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuBarButtonActionPerformed(evt);
+            }
+        });
+
+        jMenuItem1.setText("Select Input Method");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        menuBarButton.add(jMenuItem1);
+
+        jMenuItem2.setText("Add Book");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        menuBarButton.add(jMenuItem2);
+
         jMenuBar1.add(menuBarButton);
 
         setJMenuBar(jMenuBar1);
@@ -173,6 +186,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(inputPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(outputLabel)
                         .addGap(4, 4, 4)
@@ -181,7 +195,7 @@ public class MainFrame extends javax.swing.JFrame {
                         .addComponent(outputBrowse)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(saveButton)
-                        .addGap(0, 39, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -192,7 +206,9 @@ public class MainFrame extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(286, Short.MAX_VALUE)
+                .addGap(27, 27, 27)
+                .addComponent(inputPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 253, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -203,120 +219,128 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(20, 20, 20))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
+                    .addGap(24, 24, 24)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 69, Short.MAX_VALUE)))
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void inputFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_inputFieldActionPerformed
-
     private void outputFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_outputFieldActionPerformed
-         // jfiel choose goes here
-   
-    
+        // jfiel choose goes here
+
+
     }//GEN-LAST:event_outputFieldActionPerformed
- 
-    
-    private void inputBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputBrowseActionPerformed
-      // jfiel choose goes here
-   JFileChooser chooser = new JFileChooser();
-   //chooser.showOpenDialog(this);
-  int returnValue = chooser.showOpenDialog(null);
-		// int returnValue = jfc.showSaveDialog(null);
 
-    if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = chooser.getSelectedFile();
-            inputField.setText(selectedFile.getAbsolutePath());
-    }
-    }//GEN-LAST:event_inputBrowseActionPerformed
-
-    private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
-        // Make Variables
-        String title, author, isbn ;
-        int i = 0;
-        Book book= new Book();
-        // Make Array of Books
-        ArrayList<Book> bookArray = new ArrayList<Book>();
-        //Open File
-        File path = new File(inputField.getText());
-        // Make Scanner
-        Scanner sc;
-        
-        try {
-            sc = new Scanner(path);
-            
-            sc.useDelimiter(",");
-            while(sc.hasNext()){
-            if(sc.hasNext()){
-                title = sc.next();
-                author = sc.next();
-                isbn = sc.nextLine();
-                book.setTitle(title);
-                book.setAuthor(author);
-                book.setIsbn(isbn);
-                bookArray.add(book);
-               }
-               // We have the list here
-               DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-               Object rowData[] = new Object[3];
-             
-                    rowData[0] = bookArray.get(i).getTitle();
-                    rowData[1]=bookArray.get(i).getAuthor();
-                    rowData[2 ] = bookArray.get(i).getIsbn();
-                    model.addRow(rowData);
-                    i++;
-                
-              }
-     
-           
-              
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-      
-    }//GEN-LAST:event_loadButtonActionPerformed
 
     private void outputBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_outputBrowseActionPerformed
         // TODO add your handling code here:
         JFileChooser chooser = new JFileChooser();
-   //chooser.showOpenDialog(this);
-  int returnValue = chooser.showOpenDialog(null);
-		// int returnValue = jfc.showSaveDialog(null);
+        //chooser.showOpenDialog(this);
+        int returnValue = chooser.showOpenDialog(null);
+        // int returnValue = jfc.showSaveDialog(null);
 
-    if (returnValue == JFileChooser.APPROVE_OPTION) {
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
             File selectedFile = chooser.getSelectedFile();
             outputField.setText(selectedFile.getAbsolutePath());
-                     }
+        }
     }//GEN-LAST:event_outputBrowseActionPerformed
+    private void loadTable(ArrayList<Book> bookArray) {
+        //ArrayList<Book> bookArray = csvFileLoaderBean1.getBookArray();
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        Object rowData[] = new Object[3];
+        int i = 0;
+        for (Book b : bookArray) {
+            System.out.println(b);
+            rowData[0] = bookArray.get(i).getTitle();
+            rowData[1] = bookArray.get(i).getAuthor();
+            rowData[2] = bookArray.get(i).getIsbn();
+            model.addRow(rowData);
+            i++;
 
+        }
+    }
+    public void addBooktoTable(Book book){
+        Book arr[] = null;
+        arr[0] = book;
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.addRow(arr);
+    }
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-       try{
-        File file = new File(outputField.getText());
-       if(!file.exists()){
-           file.createNewFile();
-       }
-       FileWriter fw = new FileWriter(file.getAbsoluteFile());
-       BufferedWriter bw =  new BufferedWriter(fw);
-       
-           for (int i = 0; i < jTable1.getRowCount(); i++) {
-               for (int j = 0; j < jTable1.getColumnCount(); j++) {
-                   bw.write( jTable1.getModel().getValueAt(i, j)+",");
-               }
-               bw.write("\n");
-           }
-           bw.close();
-           fw.close();
-       }
-       catch(Exception ex){
-           // what does this do?
-           ex.printStackTrace();
-           
-       }
+        try {
+            File file = new File(outputField.getText());
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            for (int i = 0; i < jTable1.getRowCount(); i++) {
+                for (int j = 0; j < jTable1.getColumnCount(); j++) {
+                    bw.write(jTable1.getModel().getValueAt(i, j) + ",");
+                }
+                bw.write("\n");
+            }
+            bw.close();
+            fw.close();
+        } catch (Exception ex) {
+            // what does this do?
+            ex.printStackTrace();
+
+        }
     }//GEN-LAST:event_saveButtonActionPerformed
+
+    private void menuBarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuBarButtonActionPerformed
+
+
+    }//GEN-LAST:event_menuBarButtonActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        
+        MenuButton menuButton = new MenuButton(this, true);
+        menuButton.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                switch(menuButton.getSelectedInput()){
+                    case 1:
+                        changeCard("xmlCard");
+                        break;
+                    case 2:
+                        changeCard("SQLcard");
+                        break;
+                    case 0:
+                        changeCard("csvInput");
+                        break;
+                }
+            }
+
+        });
+
+        menuButton.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+       
+        AddBook addBook = new AddBook(this, true);
+        addBook.setDefaultCloseOperation(addBook.DISPOSE_ON_CLOSE);
+       addBook.setVisible(true);
+       addBook.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+             
+            }
+            
+
+        });
+       
+       //addBook.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    public void changeCard(String cardName) {
+        CardLayout cardLayout = (CardLayout) inputPanel.getLayout();
+        cardLayout.show(inputPanel, cardName);
+    }
 
     /**
      * @param args the command line arguments
@@ -348,29 +372,33 @@ public class MainFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainFrame().setVisible(true);
+                MainFrame frame = new MainFrame();
+                frame.setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton inputBrowse;
-    private javax.swing.JTextField inputField;
-    private javax.swing.JLabel inputLabel;
+    private com.IanFund.java.csvFileLoaderBean csvFileLoaderBean1;
+    private javax.swing.JPanel inputPanel;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JButton loadButton;
     private javax.swing.JMenu menuBarButton;
     private javax.swing.JButton outputBrowse;
     private javax.swing.JTextField outputField;
     private javax.swing.JLabel outputLabel;
     private javax.swing.JButton saveButton;
+    private com.IanFund.java.sqlFileLoaderBean sqlFileLoaderBean1;
+    private com.IanFund.java.xmlFileLoaderBean xmlFileLoaderBean1;
     // End of variables declaration//GEN-END:variables
 
-    private Book book(String title, String author, String bn) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @Override
+    public void actionPerformed(ActionEvent ae) {
+
     }
 }

@@ -42,4 +42,8 @@ public class Book {
     public String getIsbn(){
         return this.isbn;
     }
+    @Override
+    public String toString(){
+        return title;
+    }
 }
